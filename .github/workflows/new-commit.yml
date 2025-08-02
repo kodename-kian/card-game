@@ -1,0 +1,23 @@
+name: Notify Commit
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_COMMIT: ${{ github.sha }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: |
+          curl -H "Content-Type: application/json" \
+            -X POST \
+            -d "{\"content\": \"New commit pushed to \`${GITHUB_REPO}\` by \`${GITHUB_ACTOR}\`: <https://github.com/${GITHUB_REPO}/commit/${GITHUB_COMMIT}>\"}" \
+            $DISCORD_WEBHOOK
