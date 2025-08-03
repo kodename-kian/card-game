@@ -19,5 +19,13 @@ jobs:
         run: |
           curl -H "Content-Type: application/json" \
             -X POST \
-            -d "{\"content\": \"New commit pushed to \`${GITHUB_REPO}\` by \`${GITHUB_ACTOR}\`: <https://github.com/${GITHUB_REPO}/commit/${GITHUB_COMMIT}>\"}" \
+            -d "{
+              \"embeds\": [
+                {
+                  \"title\": \"New commit pushed to ${GITHUB_REPO}\",
+                  \"description\": \"**Author:** ${GITHUB_ACTOR}\n[View on Github](https://github.com/${GITHUB_REPO}/commit/${GITHUB_COMMIT})\",
+                  \"color\": 43775
+                }
+              ]
+            }" \
             $DISCORD_WEBHOOK
